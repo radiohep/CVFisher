@@ -17,7 +17,15 @@ an internal Friedman equation and don't want to properly deal with neutrino dist
 Finally, the `assumptions/src/make_cosmo.py` is a script used to generate the above. In needs `classy` module that
 interfaces CLASS code to python (imperfectly).
 
-
+Cosmology used for the above is defined as LCDM(don't forget to update this is `make_cosmo` changes!!) with:
+```
+   'A_s': 2.234e-9,
+   'n_s': 0.96708,
+   'h': 0.67610,
+   'omega_b': 0.022319,
+   'omega_cdm': 0.11910,
+   'tau_reio': 0.0865,
+```
 
 
 
