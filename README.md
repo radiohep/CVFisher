@@ -7,9 +7,9 @@ The structure is as follows:
 
 Three files in this directory:
 
-`background_zlow.dat`: distance and growth factor for z=0..6
-`background_zhigh.dat`: distance and growth factor for z=30-50
-`pk0.dat`: linear power spectrum as z=0 -- to be assumed to just scale with growth factor^2
+ * `background_zlow.dat`: distance and growth factor for z=0..6
+ * `background_zhigh.dat`: distance and growth factor for z=30-50
+ * `pk0.dat`: linear power spectrum as z=0 -- to be assumed to just scale with growth factor^2
 
 The assumed cosmology was Planck15 + BAO *with massless* neutrinos. The motivation here is that perhaps some codes do have
 an internal Friedman equation and don't want to properly deal with neutrino distribution function.
