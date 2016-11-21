@@ -7,12 +7,23 @@ The structure is as follows:
 
 Three files in this directory:
 
- * `background_zlow.dat`: distance and growth factor for z=0..6
- * `background_zhigh.dat`: distance and growth factor for z=30-50
+ * `background_zlow.dat`: cosmo and astro parameters for z=0..6
+ * `background_zhigh.dat`: cosmo as astro parameters for z=30-50
  * `pk0.dat`: linear power spectrum as z=0 -- to be assumed to just scale with growth factor^2
 
 The assumed cosmology was Planck15 + BAO *with massless* neutrinos. The motivation here is that perhaps some codes do have
 an internal Friedman equation and don't want to properly deal with neutrino distribution function.
+
+Columns in `background_*.dat` files are:
+`z distance(z)[Mpc] growth(z)[normalised at z=0] Tspin(z) [mK]  b(z) N(z) [Mpc^3]`
+
+For spin temperature, I took:
+ * Low-z: Tzu-Ching et al, arXiv:0709.3672 formula
+ * High-z: Model by Pritchard & Loeb, arXiv:1005.4057, as supplied to me by ACLiu
+ 
+For bias, shot-noise:
+ * Low-z: Castorina & Villaescusa-Navarro, arXiv:/1609.05157
+ * High-z: bias=1, Pn=0
 
 Finally, the `assumptions/src/make_cosmo.py` is a script used to generate the above. In needs `classy` module that
 interfaces CLASS code to python (imperfectly).
