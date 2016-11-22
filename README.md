@@ -3,9 +3,11 @@
 This repo is to co-ordinate running of Fisher codes for the 21-cm CV group.
 The structure is as follows:
 
-## assumptions
+## Assumptions
 
-Three files in this directory:
+### Cosmology
+
+Three files in directory `assumptions`:
 
  * `background_zlow.dat`: cosmo and astro parameters for z=0..6
  * `background_zhigh.dat`: cosmo as astro parameters for z=30-50
@@ -39,5 +41,25 @@ Cosmology used for the above is defined as LCDM(don't forget to update this is `
 ```
 
 
+### Sky background
 
+For the sake of concreteness, let's assume this fitting formula
 
+Tsky = 2000K * (f/100MHz)^(-2.4) + 2.7K
+
+This is consistent with typical sky for NRAO plot:
+
+https://www.cv.nrao.edu/~demerson/radiosky/rsky_p3.htm
+
+## Experiment
+
+Let's do experiment by letters:
+
+### Experiment A:
+
+ * 32x32 regular grid of parabollic dishes
+ * D=10m
+ * f_sky=0.5
+ * Treceiver=10K and 50K
+ * zrange1: 0-6, zrange2: 30-50
+ 
