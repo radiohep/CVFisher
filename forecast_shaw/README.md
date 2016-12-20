@@ -23,3 +23,9 @@ There are a few datasets:
   the band is stored as an attribute on the dataset.
 - `k_bin` - the binning used for the power spectrum, this array gives the lower
   and upper edges of each power spectrum bin.
+
+As github isn't a great place to share the large binary files produced, for the
+moment I've put them up on my departmental web space:
+
+ - [Experiment A, T_recv=50 K](http://www.phas.ubc.ca/~richard/sn_lowz_expA_50K.h5)
+ - [Experiment A, T_recv=10 K](http://www.phas.ubc.ca/~richard/sn_lowz_expA_10K.h5)

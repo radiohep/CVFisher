@@ -11,8 +11,8 @@ h = 0.67610
 #
 # Note that all distances are in Mpc, so we need to convert everything
 # into Mpc / h (including the PS units)
-background = np.genfromtxt('CVFisher/assumptions/background_zlow.dat')
-pk = np.genfromtxt('CVFisher/assumptions/pk0.dat')
+background = np.genfromtxt('../assumptions/background_zlow.dat')
+pk = np.genfromtxt('../assumptions/pk0.dat')
 
 
 # A convenience function for creating interpolation functions
