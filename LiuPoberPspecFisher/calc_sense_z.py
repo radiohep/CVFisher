@@ -199,7 +199,7 @@ for ind,kbin in enumerate(sense1d):
     Tsense1d[ind] = Tsense1d[ind]**-.5
 
 #save results to output npz
-n.savez('%s_%s_%.3f.npz' % (name,opts.model,opts.freq),ks=kmag,errs=sense1d,T_errs=Tsense1d)
+n.savez('%s_%s_%.8f.npz' % (name,opts.model,opts.freq),ks=kmag,errs=sense1d,T_errs=Tsense1d)
 
 #calculate significance with least-squares fit of amplitude
 A = p21(kmag)
