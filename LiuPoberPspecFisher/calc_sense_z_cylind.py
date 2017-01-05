@@ -218,5 +218,5 @@ for i, kperp in enumerate(kprs):
     mu = kpara / k
     pspec = p21(k) * (bias + growth_f * mu**2)**2
     snr += (pspec / sense_cylind[i,j])**2
-print 'total snr = ', n.sqrt(snr), ' at redshift ', 
+print 'total snr = ', n.sqrt(snr), ' at redshift ', z
 
