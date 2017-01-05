@@ -2,7 +2,7 @@
 
 zStart=6.0
 deltaZ=-0.5
-numZs=1
+numZs=2
 restFreq=1.420 # Rest frequency of spectral line 
 fgOption='opt'
 fgAmp=2000.0 # in K, at 100 MHz
@@ -57,11 +57,11 @@ for (( i=0 ; $i<$numZs ; i=$i+1 )) ; do
     current_array_fname="`cat temp.log | tail -1`"
     rm temp.log
 
-    python scalePspec.py --pspecPath="$base_pspec_path" --bgPath="$base_bg_path" --chosenFreq=$currentFreq --restFreq=$restFreq --outPath="temp_DeltaSq.dat"
+    python scalePspec_noBias.py --pspecPath="$base_pspec_path" --bgPath="$base_bg_path" --chosenFreq=$currentFreq --restFreq=$restFreq --outPath="temp_Pk.npz"
 
 
-    python calc_sense_z.py -m $fgOption -T $currentTsky -R $restFreq -f $currentFreq --bwidth=$currentBandwidth $current_array_fname --eor="temp_DeltaSq.dat"
-    rm temp_DeltaSq.dat
+    python calc_sense_z_cylind.py -m $fgOption -T $currentTsky -R $restFreq -f $currentFreq --bwidth=$currentBandwidth $current_array_fname --eor="temp_Pk.npz"
+    rm temp_Pk.npz
 
 done
 
