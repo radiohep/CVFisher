@@ -38,13 +38,13 @@ class Assumptions:
         return vol*volk
 
 
-    def KBinModes2Ddk(self,z1,z2,kperp, dk,  A=4*np.pi):
+    def KBinModes2Ddk(self,z1,z2,kperp, dkperp, dkpar,  A=4*np.pi):
         """ 
         Gives the number of comoving modes between z1 and z2 and k1 and k2
         for a full sky experiment, unless A is specified
         """
         vol=A/3.*(self.di(z2)**3-self.di(z1)**3)
-        volk=2*np.pi*kperp*dk*dk
+        volk=2*np.pi*kperp*dkperp*dkpar
         return vol*volk
     
     def PkisoDM(self,k,z):
@@ -65,6 +65,11 @@ class Assumptions:
             print "f=",f
             print "Pk=",Pk
         return Tspin**2*(bias + f*mu**2)**2 * Pk
+
+    def Pkkperkpar(self, kperp, kpar,z):
+        k=np.sqrt(kperp**2+kpar**2)
+        mu=kpar/k
+        return self.Pkmuz(k,mu,z)
     
 if __name__=="__main__":
     A=Assumptions()

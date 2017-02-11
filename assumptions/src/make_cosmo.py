@@ -54,7 +54,7 @@ h=params['h']
 # first let's compute background values at our zs
 for name,zs in [("zlow",zlow),("zhigh",zhigh)]:
     f=open("background_%s.dat"%(name),'w')
-    f.write("# z distance(z)[Mpc] growth(z)[normalised at z=0] Tspin(z) [mK]  b(z) N(z) [Mpc^3] \n")
+    f.write("# z distance(z)[Mpc] growth(z)[normalised at z=0] f(z) Tspin(z) [mK]  b(z) N(z) [Mpc^3] \n")
     for z in zs:
         dist=cldr.luminosity_distance(z)/(1+z) # this is what class has
         gf=np.sqrt(cldr.pk(0.1,z)/cldr.pk(0.1,0)) # evaluate at k=0.1 h/Mpc, good enough

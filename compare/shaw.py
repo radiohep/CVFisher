@@ -34,7 +34,7 @@ class Shaw:
         for i,z in enumerate(self.zs):
             zl=self.zlow[i]
             zh=self.zhigh[i]
-            Nm=A.KBinModes2Ddk(zl,zh,kperp,self.dk)
+            Nm=A.KBinModes2Ddk(zl,zh,kperp,self.dk, self.dk)
             valspermode.append(vals[i]*np.sqrt(Nm))
         self.vals=vals
         self.valspermode=valspermode
@@ -55,7 +55,7 @@ class Shaw:
                     break
         DZ=self.zs[zi+1]-self.zs[zi]
         w=(z-self.zs[zi])/DZ
-        return self.valspermode[zi][i,j]*(1-w)+self.valspermode[zi+1][i,j]*w
+        return self.valspermode[zi][j,i]*(1-w)+self.valspermode[zi+1][j,i]*w
 
 if __name__=="__main__":
     import assumptions as A
