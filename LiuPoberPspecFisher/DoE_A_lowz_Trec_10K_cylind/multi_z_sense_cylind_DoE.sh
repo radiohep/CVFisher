@@ -12,7 +12,7 @@ zHalfWidth=`echo "scale=20; $deltaZ / 2.0" | bc -l`
 base_bg_path='/Users/acliu/Research/radiohep/CVFisher/assumptions/background_zlow.dat'
 base_pspec_path='/Users/acliu/Research/radiohep/CVFisher/assumptions/pk0.dat'
 dish_size=10.0 # in meters
-Trx='5e4' # receiver temp in mK
+Trx='1e4' # receiver temp in mK
 sqSidelength=32 # number of dishes on one side of the square
 sqSpacing=10.0 # distance between dish centers in meters
 sqSpacing_in_cm=`echo "scale=5; $sqSpacing * 100.0" | bc -l`

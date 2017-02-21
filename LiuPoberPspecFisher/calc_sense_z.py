@@ -47,17 +47,17 @@ def z2D(z,Omm = 0.3089,OmL = 0.6911):
 #Multiply by this to convert an angle on the sky to a transverse distance in Mpc/h at redshift z
 dL_dth = interpolate.interp1d(n.linspace(0.,200.,5000),map(z2D,n.linspace(0.,200.,5000)),bounds_error=False,fill_value=-1)
 #Version below only works for z ~ reionization.
-# def dL_dth(z):
-#     '''[h^-1 Mpc]/radian, from Furlanetto et al. (2006)'''
-#     return 1.9 * (1./a.const.arcmin) * ((1+z) / 10.)**.2
+def dL_dth_2(z):
+    '''[h^-1 Mpc]/radian, from Furlanetto et al. (2006)'''
+    return 1.9 * (1./a.const.arcmin) * ((1+z) / 10.)**.2
 
 #Multiply by this to convert a bandwidth in GHz to a line of sight distance in Mpc/h at redshift z
 def dL_df(z,Omm = 0.3089,OmL = 0.6911):
     return preFac * (1 + z)**2 / (restFreq * n.sqrt(OmL + Omm * (1+z)**3) )
 #Version below only works for z ~ reionization.
-# def dL_df(z, omega_m=0.266):
-#     '''[h^-1 Mpc]/GHz, from Furlanetto et al. (2006)'''
-#     return (1.7 / 0.1) * ((1+z) / 10.)**.5 * (omega_m/0.15)**-0.5 * 1e3
+def dL_df_2(z, omega_m=0.266):
+    '''[h^-1 Mpc]/GHz, from Furlanetto et al. (2006)'''
+    return (1.7 / 0.1) * ((1+z) / 10.)**.5 * (omega_m/0.15)**-0.5 * 1e3
 
 #Multiply by this to convert a baseline length in wavelengths (at the frequency corresponding to redshift z) into a tranverse k mode in h/Mpc at redshift z
 def dk_du(z):
@@ -97,12 +97,15 @@ else:
 h = 0.7
 B = opts.bwidth
 z = f2z(opts.freq)
-
+print 'dL_dth',dL_dth(z)
+print 'dL_dth_2',dL_dth_2(z)
+print 'dL_df',dL_df(z)
+print 'dL_df_2',dL_df_2(z)
 
 # Next line no longer necessary because the new mk_array_file.py i.e. mk_array_file_z.py
 # does this step now
 #dish_size_in_lambda = dish_size_in_lambda*(opts.freq/.150) # linear frequency evolution, relative to 150 MHz
-# print obs_duration
+print 'obs_duration', obs_duration
 # assert False
 first_null = 1.22/dish_size_in_lambda #for an airy disk, even though beam model is Gaussian
 bm = 1.13*(2.35*(0.45/dish_size_in_lambda))**2
@@ -111,6 +114,14 @@ kpls = dk_deta(z) * n.fft.fftfreq(nchan,B/nchan)
 
 Tsky = 1e3 * opts.Tsky  # sky temperature in mK
 n_lstbins = opts.n_per_day*60./obs_duration
+
+print 'Tsky',Tsky
+print 'n_lstbins',n_lstbins
+print 'B',B
+print 'z',z
+print 'first_null',first_null
+print 'bm',bm
+print 'nchan',nchan
 
 #===============================EOR MODEL===================================
 
@@ -178,6 +189,8 @@ for iu,iv in zip(nonzero[1], nonzero[0]):
 #bin the result in 1D
 delta = dk_deta(z)*(1./B) #default bin size is given by bandwidth
 kmag = n.arange(delta,n.max(mk),delta)
+
+print kmag
 
 kprs = n.array(kprs)
 sense1d = n.zeros_like(kmag)

@@ -156,7 +156,7 @@ for iu,iv in zip(nonzero[1], nonzero[0]):
    elif opts.model in ['opt']: hor = dk_deta(z) * (umag/opts.freq)*n.sin(first_null/2)
    else: print '%s is not a valid foreground model; Aborting...' % opts.model; sys.exit()
    if not sense.has_key(kpr):
-       print kpr
+       #print kpr
        sense[kpr] = n.zeros_like(kpls)
        Tsense[kpr] = n.zeros_like(kpls)
    for i, kpl in enumerate(kpls):
@@ -215,6 +215,7 @@ snr = 0.
 for i, kperp in enumerate(kprs):
   for j, kpara in enumerate(kpl_folded):
     k = n.sqrt(kpara**2 + kperp**2)
+    if k < n.min(mk) or k > n.max(mk): continue
     mu = kpara / k
     pspec = p21(k) * (bias + growth_f * mu**2)**2
     snr += (pspec / sense_cylind[i,j])**2
