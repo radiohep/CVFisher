@@ -34,8 +34,10 @@ def beamgridder(xcen,ycen,size):
 
 #==============================READ ARRAY PARAMETERS=========================
 
+fq = opts.freq 
+
 #load cal file
-aa = a.cal.get_aa(opts.cal,n.array([.150]))
+aa = a.cal.get_aa(opts.cal,n.array([fq]))
 nants = len(aa)
 prms = aa.get_arr_params()
 if opts.track:
@@ -48,13 +50,13 @@ dish_size_in_lambda = prms['dish_size_in_lambda']
 
 #==========================FIDUCIAL OBSERVATION PARAMETERS===================
 
-#while poor form to hard code these to arbitrary values, they have very little effect on the end result
-
-fq = opts.freq #This is just the fiducial frequency for scaling. changing this parameter will not change your observing band, but rather break the scaling relations in calc_sense.  to change your observing band, use the command line option in calc_sense.
 # The next two lines adjust for the fact that the cal file takes parameters scaled to 150 MHz.
 # The obs_duration changes because it depends on the FWHM of the beam.
 dish_size_in_lambda *= (fq / 0.150)
 obs_duration /= (fq / 0.150)
+
+print "fq is ", fq
+print "here, dish_size_in_lambda is ", dish_size_in_lambda
 
 #observing time
 t_int = 60. #how many seconds a single visibility has integrated
@@ -75,6 +77,8 @@ obs_lst = aa.sidereal_time()
 obs_zen = a.phs.RadioFixedBody(obs_lst,aa.lat)
 obs_zen.compute(aa) #observation is phased to zenith of the center time of the drift 
 
+
+
 #find redundant baselines
 bl_len_min = opts.bl_min / (a.const.c/(fq*1e11)) #converts meters to lambda
 bl_len_max = 0.
@@ -83,6 +87,7 @@ for i in xrange(nants):
     for j in xrange(nants):
         if i == j: continue #no autocorrelations
         u,v,w = aa.gen_uvw(i,j,src=obs_zen)
+        #print 'ohno: ',u,v,w
         bl_len = n.sqrt(u**2 + v**2)
         if bl_len > bl_len_max: bl_len_max = bl_len
         if bl_len < bl_len_min: continue
@@ -91,6 +96,8 @@ for i in xrange(nants):
         if not uvbins.has_key(uvbin): uvbins[uvbin] = ['%i,%i' % (i,j)]
         else: uvbins[uvbin].append('%i,%i' % (i,j))
 print 'There are %i baseline types' % len(uvbins.keys())
+print 'a.const.c is ', a.const.c
+print 'bl_len_max is ', bl_len_max
 
 print 'The longest baseline is %.2f meters' % (bl_len_max*(a.const.c/(fq*1e11))) #1e11 converts from GHz to cm
 if opts.bl_max: 
@@ -99,6 +106,7 @@ if opts.bl_max:
 
 #grid each baseline type into uv plane
 dim = n.round(bl_len_max/dish_size_in_lambda)*2 + 1 # round to nearest odd
+print "dim of uv grid is ",  dim
 uvsum,quadsum = n.zeros((dim,dim)), n.zeros((dim,dim)) #quadsum adds all non-instantaneously-redundant baselines incoherently
 for cnt, uvbin in enumerate(uvbins):
     print 'working on %i of %i uvbins \r' % (cnt+1, len(uvbins)),
@@ -124,6 +132,7 @@ print "Saving file as " + fname
 text_file = open("temp.log", "w")
 text_file.write("%s" % fname)
 text_file.close()
+print "dish_size_in_lambda is ", dish_size_in_lambda
 n.savez(fname,
 uv_coverage = uvsum,
 uv_coverage_pess = quadsum,

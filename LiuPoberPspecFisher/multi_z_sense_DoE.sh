@@ -1,6 +1,6 @@
 #!/bin/bash
 
-zStart=6.0
+zStart=0.5
 deltaZ=-0.5
 numZs=1
 restFreq=1.420 # Rest frequency of spectral line 
@@ -12,7 +12,7 @@ zHalfWidth=`echo "scale=20; $deltaZ / 2.0" | bc -l`
 base_bg_path='../assumptions/background_zlow.dat'
 base_pspec_path='../assumptions/pk0.dat'
 dish_size=10.0 # in meters
-Trx='5e4' # receiver temp in mK
+Trx='1e4' # receiver temp in mK
 sqSidelength=32 # number of dishes on one side of the square
 sqSpacing=10.0 # distance between dish centers in meters
 sqSpacing_in_cm=`echo "scale=5; $sqSpacing * 100.0" | bc -l`
@@ -56,9 +56,6 @@ for (( i=0 ; $i<$numZs ; i=$i+1 )) ; do
     python mk_array_file_z.py -C $calFname -f $currentFreq
     current_array_fname="`cat temp.log | tail -1`"
     rm temp.log
-
-    python scalePspec.py --pspecPath="$base_pspec_path" --bgPath="$base_bg_path" --chosenFreq=$currentFreq --restFreq=$restFreq --outPath="temp_DeltaSq.dat"
-
 
     python calc_sense_z.py -m $fgOption -T $currentTsky -R $restFreq -f $currentFreq --bwidth=$currentBandwidth $current_array_fname --eor="temp_DeltaSq.dat"
     rm temp_DeltaSq.dat
