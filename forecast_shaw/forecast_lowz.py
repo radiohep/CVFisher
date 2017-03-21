@@ -84,7 +84,10 @@ if __name__ == '__main__':
     sn, nmodes, signal, inv_noise, shot_noise=experiment_a.signal_noise_single(800., 1000., debug=True)
     print nmodes.shape
     print experiment_a.kbin[:10]
-    print (np.arange(500)*0.01+0.005)[0:10]
+    print signal[23:27,23:27]*(0.18694*1e3)**2,'signal'
+
+    #print (np.arange(500)*0.01+0.005)[0:10]
+    print sn[23:27,23:27]
     stop()
     
     import h5py

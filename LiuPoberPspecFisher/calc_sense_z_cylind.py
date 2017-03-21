@@ -206,6 +206,7 @@ for ind, kpr in enumerate(sense.keys()):
         if k > n.max(mk): continue
         #add errors in inverse quadrature for further binning
         pair=find_nearest(kprs,kpr),find_nearest(kpl_folded,abs(kpl))
+        print kpl,kpr,pair
         sense_cylind[pair] += 1./sense[kpr][i]**2
         Tsense_cylind[pair] += 1./Tsense[kpr][i]**2
         pk_cylind[pair] = pkdic[kpr][i]
@@ -215,8 +216,9 @@ Tsense_cylind = Tsense_cylind**-0.5
 
 
 print pk_cylind.shape
-print pk_cylind[:10,:10],'X'
-print sense_cylind[:10,:10],'X'
+print pk_cylind[23:27,23:27],'signal'
+print sense_cylind[23:27,23:27],'sens'
+print (pk_cylind/sense_cylind)[23:27,23:27],'snr'
 stop()
 
 # for ind,kbin in enumerate(sense_cylind):
