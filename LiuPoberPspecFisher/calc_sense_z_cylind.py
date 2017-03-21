@@ -131,7 +131,7 @@ p21 = interpolate.interp1d(mk, mpk, kind='linear')
 #set up blank arrays/dictionaries
 kprs = []
 #sense will include sample variance, Tsense will be Thermal only
-sense, Tsense = {}, {}
+sense, Tsense, pkdic= {}, {}, {}
     
 uv_coverage *= t_int
 SIZE = uv_coverage.shape[0]
@@ -159,6 +159,7 @@ for iu,iv in zip(nonzero[1], nonzero[0]):
        print kpr
        sense[kpr] = n.zeros_like(kpls)
        Tsense[kpr] = n.zeros_like(kpls)
+       pkdic[kpr] = n.zeros_like(kpls)
    for i, kpl in enumerate(kpls):
        #exclude k_parallel modes contaminated by foregrounds
        if n.abs(kpl) < hor: continue
@@ -177,7 +178,7 @@ for iu,iv in zip(nonzero[1], nonzero[0]):
        #add errors in inverse quadrature
        sense[kpr][i] += 1./(scalar*Trms**2 + pspec)**2
        Tsense[kpr][i] += 1./(scalar*Trms**2)**2
-
+       pkdic[kpr][i] = pspec
 
 #bin the result in 1D
 delta = dk_deta(z)*(1./B) #default bin size is given by bandwidth
@@ -185,8 +186,17 @@ kmag = n.arange(delta,n.max(mk),delta)
 
 kprs = n.unique(kprs)
 kpl_folded = n.linspace(0.,n.max(abs(kpls)),len(kpls)/2+1)
+print kpl_folded[:10]
+#
+## anze debug##
+shawks=n.arange(500)*0.01+0.005
+kprs=shawks*1.0
+kpl_folded=shawks*1.0
+###
+
 sense_cylind = n.zeros((len(kprs),len(kpl_folded)))
 Tsense_cylind = n.zeros((len(kprs),len(kpl_folded)))
+pk_cylind = n.zeros((len(kprs),len(kpl_folded)))
 for ind, kpr in enumerate(sense.keys()):
     #errors were added in inverse quadrature, now need to invert and take square root to have error bars; also divide errors by number of indep. fields
     sense[kpr] = sense[kpr]**-.5 / n.sqrt(n_lstbins)
@@ -195,12 +205,20 @@ for ind, kpr in enumerate(sense.keys()):
         k = n.sqrt(kpl**2 + kpr**2)
         if k > n.max(mk): continue
         #add errors in inverse quadrature for further binning
-        sense_cylind[find_nearest(kprs,kpr),find_nearest(kpl_folded,abs(kpl))] += 1./sense[kpr][i]**2
-        Tsense_cylind[find_nearest(kprs,kpr),find_nearest(kpl_folded,abs(kpl))] += 1./Tsense[kpr][i]**2
-
+        pair=find_nearest(kprs,kpr),find_nearest(kpl_folded,abs(kpl))
+        sense_cylind[pair] += 1./sense[kpr][i]**2
+        Tsense_cylind[pair] += 1./Tsense[kpr][i]**2
+        pk_cylind[pair] = pkdic[kpr][i]
 #invert errors and take square root again for final answer
 sense_cylind = sense_cylind**-0.5
 Tsense_cylind = Tsense_cylind**-0.5
+
+
+print pk_cylind.shape
+print pk_cylind[:10,:10],'X'
+print sense_cylind[:10,:10],'X'
+stop()
+
 # for ind,kbin in enumerate(sense_cylind):
 #     sense1d[ind] = kbin**-.5
 #     Tsense1d[ind] = Tsense1d[ind]**-.5

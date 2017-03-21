@@ -79,6 +79,14 @@ experiment_a.num_year = 5.0  # not given by Anze
 
 if __name__ == '__main__':
 
+    ## debug anze
+    
+    sn, nmodes, signal, inv_noise, shot_noise=experiment_a.signal_noise_single(800., 1000., debug=True)
+    print nmodes.shape
+    print experiment_a.kbin[:10]
+    print (np.arange(500)*0.01+0.005)[0:10]
+    stop()
+    
     import h5py
 
     # Generate and write out the forecast for T_recv=50K

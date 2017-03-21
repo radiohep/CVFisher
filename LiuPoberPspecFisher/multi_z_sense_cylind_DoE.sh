@@ -9,8 +9,8 @@ fgAmp=2000.0 # in K, at 100 MHz
 fgOffset=2.7 # in K
 fgSpecIndex=2.4
 zHalfWidth=`echo "scale=20; $deltaZ / 2.0" | bc -l`
-base_bg_path='/Users/acliu/Research/radiohep/CVFisher/assumptions/background_zlow.dat'
-base_pspec_path='/Users/acliu/Research/radiohep/CVFisher/assumptions/pk0.dat'
+base_bg_path='..//assumptions/background_zlow.dat'
+base_pspec_path='..//assumptions/pk0.dat'
 dish_size=10.0 # in meters
 Trx='1e4' # receiver temp in mK
 sqSidelength=32 # number of dishes on one side of the square

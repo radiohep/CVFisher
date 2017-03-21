@@ -254,7 +254,7 @@ class InterferometerBase(object):
         sn = signal * inv_noise / (1.0 + (signal + self.shot_noise(zc)) * inv_noise) * nmodes**0.5
 
         if debug:
-            return sn, nmodes, signal, inv_noise
+            return sn, nmodes, signal, inv_noise, self.shot_noise(zc)
         else:
             return sn
 

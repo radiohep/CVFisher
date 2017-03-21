@@ -79,7 +79,7 @@ obs_zen.compute(aa) #observation is phased to zenith of the center time of the d
 bl_len_min = opts.bl_min / (a.const.c/(fq*1e11)) #converts meters to lambda
 bl_len_max = 0.
 for i in xrange(nants):
-    print 'working on antenna %i of %i' % (i, len(aa))
+    print 'working on antenna %i of %i \r' % (i, len(aa)),
     for j in xrange(nants):
         if i == j: continue #no autocorrelations
         u,v,w = aa.gen_uvw(i,j,src=obs_zen)
@@ -101,7 +101,7 @@ if opts.bl_max:
 dim = n.round(bl_len_max/dish_size_in_lambda)*2 + 1 # round to nearest odd
 uvsum,quadsum = n.zeros((dim,dim)), n.zeros((dim,dim)) #quadsum adds all non-instantaneously-redundant baselines incoherently
 for cnt, uvbin in enumerate(uvbins):
-    print 'working on %i of %i uvbins' % (cnt+1, len(uvbins))
+    print 'working on %i of %i uvbins \r' % (cnt+1, len(uvbins)),
     uvplane = n.zeros((dim,dim))
     for t in times:
         aa.set_jultime(t)
