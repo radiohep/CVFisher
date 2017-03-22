@@ -52,8 +52,8 @@ class InterferometerBase(object):
 
     num_year = 2.0
 
-    kmax = 5.0
-    num_k = 500
+    kmax = 5
+    num_k = 50
 
     def __init__(self):
         self.cr = corr21cm.Corr21cm()
@@ -254,7 +254,7 @@ class InterferometerBase(object):
         sn = signal * inv_noise / (1.0 + (signal + self.shot_noise(zc)) * inv_noise) * nmodes**0.5
 
         if debug:
-            return sn, nmodes, signal, inv_noise, self.shot_noise(zc)
+            return sn, nmodes, signal, signal/nmodes**0.5, 1/inv_noise/nmodes**0.5
         else:
             return sn
 

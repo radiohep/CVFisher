@@ -52,14 +52,14 @@ echo $currentZ
 # #printf "%05d\n" $i
 # echo $currentZ,$currentFreq
 
-python mk_array_file_z.py -C $calFname -f $currentFreq
+#python mk_array_file_z.py -C $calFname -f $currentFreq
 current_array_fname="`cat temp.log | tail -1`"
-rm temp.log
+#rm temp.log
 
 python scalePspec_noBias.py --pspecPath="$base_pspec_path" --bgPath="$base_bg_path" --chosenFreq=$currentFreq --restFreq=$restFreq --outPath="temp_Pk.npz"
 
 
-python calc_sense_z_cylind.py -m $fgOption -T $currentTsky -R $restFreq -f $currentFreq --bwidth=$currentBandwidth $current_array_fname --eor="temp_Pk.npz"
+python calc_sense_z_cylind.py --nchan 1024 --ndays 1825 --n_per_day 24 -m $fgOption -T $currentTsky -R $restFreq -f $currentFreq --bwidth=$currentBandwidth $current_array_fname --eor="temp_Pk.npz"
 
 
 ### To do:

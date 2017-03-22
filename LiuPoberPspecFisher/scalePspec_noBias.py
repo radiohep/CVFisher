@@ -56,6 +56,8 @@ bias = interpolate.interp1d(bgData[:,0], bgData[:,4])(chosenRedshift)
 
 #Pz0 = interpolate.interp1d(matterPspec[:,0], matterPspec[:,1])
 Pz0 = temperature**2 * growth**2 * matterPspec[:,1]
+#print temperature, growth
+#stop()
 fz0 = -(1.+chosenRedshift)/growth
 fz0 *= growth_deriv
 

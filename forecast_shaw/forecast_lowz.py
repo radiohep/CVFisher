@@ -48,7 +48,9 @@ class ForecastLowZ(simpleforecast.InterferometerBase):
         mu = kpar / k
 
         f = 1.0
-
+        f = 0.780580529904 ## FOR THIS PARTICULAR Z
+        #print bias(z), f,  Tb(z), growth(z),ps(3.92002415347)*1e6
+        #stop()
         return Tb(z)**2 * growth(z)**2 * (bias(z) + f * mu**2)**2 * ps(k)
 
     def proper_distance(self, z):
@@ -57,7 +59,7 @@ class ForecastLowZ(simpleforecast.InterferometerBase):
 
     def shot_noise(self, z):
 
-        return Tb(z)**2 / number_density(z)
+        return 0.0 ## for the time beingTb(z)**2 / number_density(z)
 
 
 experiment_a = ForecastLowZ()
@@ -81,13 +83,17 @@ if __name__ == '__main__':
 
     ## debug anze
     
-    sn, nmodes, signal, inv_noise, shot_noise=experiment_a.signal_noise_single(800., 1000., debug=True)
+    sn, nmodes, signal,signalerr, noiserr=experiment_a.signal_noise_single(800., 1000., debug=True)
     print nmodes.shape
     print experiment_a.kbin[:10]
-    print signal[23:27,23:27]*(0.18694*1e3)**2,'signal'
+    print signal.T[5:10,5:10]*(1e3)**2,'signal'
+    print (noiserr).T[5:10,5:10]*1e6,'noise'
 
-    #print (np.arange(500)*0.01+0.005)[0:10]
-    print sn[23:27,23:27]
+    import matplotlib.pyplot as plt
+    plt.imshow(np.log10(noiserr*1e6/1.85),origin='lower',vmax=-2,vmin=-3.7)
+    plt.colorbar()
+    plt.show()
+
     stop()
     
     import h5py

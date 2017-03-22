@@ -41,7 +41,7 @@ preFac = 0.299792458 * 10**6 / 100. # c / (100 km/s/Mpc)
 def f2z(fq):
     return (restFreq / fq - 1)
 
-def z2D(z,Omm = 0.3089,OmL = 0.6911):
+def z2D(z,Omm = 0.309375,OmL = 1-0.309375):
     return preFac * integrate.quad(lambda x: 1./n.sqrt(OmL + Omm * (1+x)**3), 0, z)[0]
 
 #Multiply by this to convert an angle on the sky to a transverse distance in Mpc/h at redshift z
@@ -52,7 +52,7 @@ dL_dth = interpolate.interp1d(n.linspace(0.,200.,5000),map(z2D,n.linspace(0.,200
 #     return 1.9 * (1./a.const.arcmin) * ((1+z) / 10.)**.2
 
 #Multiply by this to convert a bandwidth in GHz to a line of sight distance in Mpc/h at redshift z
-def dL_df(z,Omm = 0.3089,OmL = 0.6911):
+def dL_df(z,Omm = 0.309375,OmL = 1-0.309375):
     return preFac * (1 + z)**2 / (restFreq * n.sqrt(OmL + Omm * (1+z)**3) )
 #Version below only works for z ~ reionization.
 # def dL_df(z, omega_m=0.266):
@@ -94,7 +94,7 @@ if opts.model == 'pess':
 else:
     uv_coverage = array['uv_coverage']
 
-h = 0.7
+h = 0.67610
 B = opts.bwidth
 z = f2z(opts.freq)
 
@@ -131,7 +131,7 @@ p21 = interpolate.interp1d(mk, mpk, kind='linear')
 #set up blank arrays/dictionaries
 kprs = []
 #sense will include sample variance, Tsense will be Thermal only
-sense, Tsense, pkdic= {}, {}, {}
+sense, Tsense, pkdic, wedic= {}, {}, {}, {}
     
 uv_coverage *= t_int
 SIZE = uv_coverage.shape[0]
@@ -160,6 +160,7 @@ for iu,iv in zip(nonzero[1], nonzero[0]):
        sense[kpr] = n.zeros_like(kpls)
        Tsense[kpr] = n.zeros_like(kpls)
        pkdic[kpr] = n.zeros_like(kpls)
+       wedic[kpr] = n.zeros_like(kpls)
    for i, kpl in enumerate(kpls):
        #exclude k_parallel modes contaminated by foregrounds
        if n.abs(kpl) < hor: continue
@@ -178,7 +179,8 @@ for iu,iv in zip(nonzero[1], nonzero[0]):
        #add errors in inverse quadrature
        sense[kpr][i] += 1./(scalar*Trms**2 + pspec)**2
        Tsense[kpr][i] += 1./(scalar*Trms**2)**2
-       pkdic[kpr][i] = pspec
+       pkdic[kpr][i] += pspec
+       wedic[kpr][i] += 1.0
 
 #bin the result in 1D
 delta = dk_deta(z)*(1./B) #default bin size is given by bandwidth
@@ -189,7 +191,7 @@ kpl_folded = n.linspace(0.,n.max(abs(kpls)),len(kpls)/2+1)
 print kpl_folded[:10]
 #
 ## anze debug##
-shawks=n.arange(500)*0.01+0.005
+shawks=n.arange(50)*0.1+0.05
 kprs=shawks*1.0
 kpl_folded=shawks*1.0
 ###
@@ -197,6 +199,7 @@ kpl_folded=shawks*1.0
 sense_cylind = n.zeros((len(kprs),len(kpl_folded)))
 Tsense_cylind = n.zeros((len(kprs),len(kpl_folded)))
 pk_cylind = n.zeros((len(kprs),len(kpl_folded)))
+we_cylind = n.zeros((len(kprs),len(kpl_folded)))
 for ind, kpr in enumerate(sense.keys()):
     #errors were added in inverse quadrature, now need to invert and take square root to have error bars; also divide errors by number of indep. fields
     sense[kpr] = sense[kpr]**-.5 / n.sqrt(n_lstbins)
@@ -206,19 +209,27 @@ for ind, kpr in enumerate(sense.keys()):
         if k > n.max(mk): continue
         #add errors in inverse quadrature for further binning
         pair=find_nearest(kprs,kpr),find_nearest(kpl_folded,abs(kpl))
-        print kpl,kpr,pair
         sense_cylind[pair] += 1./sense[kpr][i]**2
         Tsense_cylind[pair] += 1./Tsense[kpr][i]**2
-        pk_cylind[pair] = pkdic[kpr][i]
+        pk_cylind[pair] += pkdic[kpr][i]
+        we_cylind[pair] += wedic[kpr][i]
 #invert errors and take square root again for final answer
 sense_cylind = sense_cylind**-0.5
 Tsense_cylind = Tsense_cylind**-0.5
-
+pk_cylind/=we_cylind
 
 print pk_cylind.shape
-print pk_cylind[23:27,23:27],'signal'
-print sense_cylind[23:27,23:27],'sens'
-print (pk_cylind/sense_cylind)[23:27,23:27],'snr'
+print pk_cylind[5:10,5:10],'signal'
+
+print Tsense_cylind[5:10,5:10],'sens'
+print (pk_cylind/sense_cylind)[5:10,5:10],'snr'
+print (pk_cylind/Tsense_cylind)[5:10,5:10],'snr'
+
+import matplotlib.pyplot as plt
+plt.imshow(n.log10(Tsense_cylind.T),origin='lower', vmin=-3.7,vmax=-2)
+plt.colorbar()
+plt.show()
+
 stop()
 
 # for ind,kbin in enumerate(sense_cylind):
