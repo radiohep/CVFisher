@@ -221,9 +221,9 @@ pk_cylind/=we_cylind
 print pk_cylind.shape
 print pk_cylind[5:10,5:10],'signal'
 
-print Tsense_cylind[5:10,5:10],'sens'
-print (pk_cylind/sense_cylind)[5:10,5:10],'snr'
-print (pk_cylind/Tsense_cylind)[5:10,5:10],'snr'
+print Tsense_cylind[10,10],'sens'
+print (pk_cylind/sense_cylind)[10,10],'snr'
+print (pk_cylind/Tsense_cylind)[10,10],'snr'
 
 import matplotlib.pyplot as plt
 plt.imshow(n.log10(Tsense_cylind.T),origin='lower', vmin=-3.7,vmax=-2)

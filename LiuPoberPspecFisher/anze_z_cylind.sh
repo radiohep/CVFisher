@@ -28,14 +28,9 @@ cat asdf3.py | sed s/"dL = 1000.".*/"dL = $sqSpacing_in_cm"/ > ${calFname}.py
 rm asdf.py asdf2.py asdf3.py
 
 
-currentZ=0.57778
-currentFreq=0.9
-
-upperZ=0.775
-lowerZ=0.42
-
-upperFreq=1.0
-lowerFreq=0.8
+currentFreq=0.80
+upperFreq=0.85
+lowerFreq=0.75
 currentBandwidth=`echo "scale=20; $upperFreq - $lowerFreq" | bc -l`
 
 # echo $currentFreq, $currentZ, $upperZ, $lowerZ
@@ -44,20 +39,16 @@ currentBandwidth=`echo "scale=20; $upperFreq - $lowerFreq" | bc -l`
 currentTsky=`echo "scale=30; $fgOffset + $fgAmp * e(-1.0 * $fgSpecIndex * l(10.0 * $currentFreq))" | bc -l`
 echo $currentFreq
 echo $currentTsky
-echo "----"
-
-echo $currentZ
 
 # currentZ="`printf '%06.2f' $currentZ`"
 # #printf "%05d\n" $i
 # echo $currentZ,$currentFreq
 
-#python mk_array_file_z.py -C $calFname -f $currentFreq
+python mk_array_file_z.py -C $calFname -f $currentFreq
 current_array_fname="`cat temp.log | tail -1`"
 #rm temp.log
 
 python scalePspec_noBias.py --pspecPath="$base_pspec_path" --bgPath="$base_bg_path" --chosenFreq=$currentFreq --restFreq=$restFreq --outPath="temp_Pk.npz"
-
 
 python calc_sense_z_cylind.py --nchan 1024 --ndays 1825 --n_per_day 24 -m $fgOption -T $currentTsky -R $restFreq -f $currentFreq --bwidth=$currentBandwidth $current_array_fname --eor="temp_Pk.npz"
 
