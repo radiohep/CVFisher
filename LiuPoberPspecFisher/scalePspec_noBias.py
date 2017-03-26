@@ -48,16 +48,15 @@ matterPspec = np.loadtxt(pspecPath)
 # Load file with global signal, bias etc.
 bgData = np.loadtxt(bgPath)
 
-temperature = interpolate.interp1d(bgData[:,0], bgData[:,3])(chosenRedshift)
+temperature = interpolate.interp1d(bgData[:,0], bgData[:,4])(chosenRedshift)
 growthFct = interpolate.interp1d(bgData[:,0], bgData[:,2])
 growth = growthFct(chosenRedshift)
-growth_deriv = numerical_deriv(growthFct,chosenRedshift,backward=True)
-bias = interpolate.interp1d(bgData[:,0], bgData[:,4])(chosenRedshift)
+growth_deriv = interpolate.interp1d(bgData[:,0], bgData[:,3])(chosenRedshift)
+bias = interpolate.interp1d(bgData[:,0], bgData[:,5])(chosenRedshift)
 
 #Pz0 = interpolate.interp1d(matterPspec[:,0], matterPspec[:,1])
 Pz0 = temperature**2 * growth**2 * matterPspec[:,1]
-fz0 = -(1.+chosenRedshift)/growth
-fz0 *= growth_deriv
+fz0 = growth_deriv
 
 # d ln D / d ln a = (a / D ) * dD / da = (a / D ) * (dD / dz ) * (dz/da) = -1/(aD) * dD/dz = -(1+z)/D dD/dz
 # 1+ z ~ 1/ a
