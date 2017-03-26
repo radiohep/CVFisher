@@ -47,16 +47,7 @@ class ForecastLowZ(simpleforecast.InterferometerBase):
 
         k = (kpar**2 + kperp**2)**0.5
         mu = kpar / k
-
-<<<<<<< HEAD
-        f = 1.0
-        f = 0.780580529904 ## FOR THIS PARTICULAR Z
-        #print bias(z), f,  Tb(z), growth(z),ps(3.92002415347)*1e6
-        #stop()
-=======
         f = growth_rate(z)
-
->>>>>>> master
         return Tb(z)**2 * growth(z)**2 * (bias(z) + f * mu**2)**2 * ps(k)
 
     def proper_distance(self, z):
@@ -89,11 +80,11 @@ if __name__ == '__main__':
 
     ## debug anze
     
-    sn, nmodes, signal,signalerr, noiserr=experiment_a.signal_noise_single(750., 850., debug=True)
+    sn, nmodes, signal,signalerr, noiserr=experiment_a.signal_noise_single(400., 500., debug=True)
     print nmodes.shape
-    print experiment_a.kbin[:10]
+    print experiment_a.kbin[:10], experiment_a.T_sky(1000.) 
     print signal.T[5:10,5:10]*(1e3)**2,'signal'
-    print (noiserr).T[10,10]*1e6,'noise'
+    print (noiserr).T[3,3]*1e6,'noise'
 
     
     import matplotlib.pyplot as plt

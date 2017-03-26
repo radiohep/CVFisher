@@ -54,15 +54,12 @@ def Tspin(z,OmegaH, OmegaM):
 # first let's compute background values at our zs
 for name,zs in [("zlow",zlow)]:#,("zhigh",zhigh)]:
     f=open("background_%s.dat"%(name),'w')
-<<<<<<< HEAD
     f.write("# z distance(z)[Mpc] growth(z)[normalised at z=0] f(z) Tspin(z) [mK]  b(z) N(z) [Mpc^3] \n")
-=======
     f.write("# z distance(z)[Mpc] growth(z)[normalised at z=0] f(z)=dlng/dlna Tspin(z) [mK]  b(z) N(z) [Mpc^3] \n")
->>>>>>> master
     for z in zs:
         print z
         afact=1./(1+z)
-        dist=ccl.luminosity_distance(cosmo,afact) # this is what class has
+        dist=ccl.comoving_radial_distance(cosmo,afact) # this is what class has
         gf=ccl.growth_factor(cosmo,afact)
         gr=ccl.growth_rate(cosmo,afact)
         print z,gr

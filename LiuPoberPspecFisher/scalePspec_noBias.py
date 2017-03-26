@@ -23,23 +23,6 @@ chosenFreq = opts.chosenFreq
 pspecPath = opts.pspecPath
 bgPath = opts.bgPath
 outPath = opts.outPath
-
-def numerical_deriv(g,x0,derivative_step=0.1,backward=False):
-    derivative_step = 0.1
-    g_x0 = g(x0)
-    if backward:
-        g_1step = g(x0-derivative_step)
-        g_2step = g(chosenRedshift-2.*derivative_step)
-        g_3step = g(chosenRedshift-3.*derivative_step)
-        g_deriv = 11./6. * g_x0 - 3. * g_1step + 3./2. * g_2step - 1./3. * g_3step
-    else:
-        g_1step = g(x0+derivative_step)
-        g_2step = g(chosenRedshift+2.*derivative_step)
-        g_3step = g(chosenRedshift+3.*derivative_step)
-        g_deriv = -11./6. * g_x0 + 3. * g_1step - 3./2. * g_2step + 1./3. * g_3step
-    g_deriv /= derivative_step
-    return g_deriv
-
 chosenRedshift = restFreq / chosenFreq - 1
 
 
@@ -57,7 +40,6 @@ bias = interpolate.interp1d(bgData[:,0], bgData[:,5])(chosenRedshift)
 #Pz0 = interpolate.interp1d(matterPspec[:,0], matterPspec[:,1])
 Pz0 = temperature**2 * growth**2 * matterPspec[:,1]
 fz0 = growth_deriv
-
 # d ln D / d ln a = (a / D ) * dD / da = (a / D ) * (dD / dz ) * (dz/da) = -1/(aD) * dD/dz = -(1+z)/D dD/dz
 # 1+ z ~ 1/ a
 # dz / da = -1/a^2

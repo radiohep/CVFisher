@@ -28,9 +28,10 @@ cat asdf3.py | sed s/"dL = 1000.".*/"dL = $sqSpacing_in_cm"/ > ${calFname}.py
 rm asdf.py asdf2.py asdf3.py
 
 
-currentFreq=0.80
-upperFreq=0.85
-lowerFreq=0.75
+
+lowerFreq=0.400
+upperFreq=0.500
+currentFreq=`echo "scale=20; 0.5*($upperFreq + $lowerFreq)" | bc -l`
 currentBandwidth=`echo "scale=20; $upperFreq - $lowerFreq" | bc -l`
 
 # echo $currentFreq, $currentZ, $upperZ, $lowerZ
