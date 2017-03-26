@@ -17,7 +17,7 @@ The assumed cosmology was Planck15 + BAO *with massless* neutrinos. The motivati
 an internal Friedman equation and don't want to properly deal with neutrino distribution function.
 
 Columns in `background_*.dat` files are:
-`z distance(z)[Mpc] growth(z)[normalised at z=0] Tspin(z) [mK]  b(z) N(z) [Mpc^3]`
+`z distance(z)[Mpc] growth(z)[normalised at z=0] growth_rate Tspin(z) [mK]  b(z) N(z) [Mpc^3]`
 
 For spin temperature, I took:
  * Low-z: Tzu-Ching et al, arXiv:0709.3672 formula
@@ -62,4 +62,5 @@ Let's do experiment by letters:
  * f_sky=0.5
  * Treceiver=10K and 50K
  * zrange1: 0-6, zrange2: 30-50
+ * integration time: 5 years at 100% efficiency
  

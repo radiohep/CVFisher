@@ -28,9 +28,10 @@ za = background[:, 0]
 # Read in each quantity, convert the units and create an interpolation function.
 distance = interpolater(za, background[:, 1] * h)
 growth = interpolater(za, background[:, 2])
-Tb = interpolater(za, background[:, 3] * 1e-3)
-bias = interpolater(za, background[:, 4])
-number_density = interpolater(za, background[:, 5] / h**3)
+growth_rate = interpolater(za, background[:, 3])
+Tb = interpolater(za, background[:, 4] * 1e-3)
+bias = interpolater(za, background[:, 5])
+number_density = interpolater(za, background[:, 6] / h**3)
 
 # Create a power spectrum function
 ps = interpolater(pk[:, 0] / h, pk[:, 1] * h**3, log=True)
@@ -47,10 +48,15 @@ class ForecastLowZ(simpleforecast.InterferometerBase):
         k = (kpar**2 + kperp**2)**0.5
         mu = kpar / k
 
+<<<<<<< HEAD
         f = 1.0
         f = 0.780580529904 ## FOR THIS PARTICULAR Z
         #print bias(z), f,  Tb(z), growth(z),ps(3.92002415347)*1e6
         #stop()
+=======
+        f = growth_rate(z)
+
+>>>>>>> master
         return Tb(z)**2 * growth(z)**2 * (bias(z) + f * mu**2)**2 * ps(k)
 
     def proper_distance(self, z):
