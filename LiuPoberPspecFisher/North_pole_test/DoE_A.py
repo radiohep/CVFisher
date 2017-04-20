@@ -54,7 +54,7 @@ class AntennaArray(a.pol.AntennaArray):
 
 #Set antenna positions here; for regular arrays like Hera we can use an algorithm; otherwise antpos should just be a list of [x,y,z] coords in light-nanoseconds
 sqSidelength = 32
-dL = 1000. 
+dL = 1000.00
 dL /= a.const.len_ns
 cen_z = 0.
 antpos = []
@@ -68,8 +68,8 @@ prms = {
     'loc': ('90:00:00.00',  '-79:51:02.1'), 
     'antpos': antpos,
     'beam': a.fit.Beam2DGaussian,
-    'dish_size_in_lambda': 5.0, #in units of wavelengths at 150 MHz = 2 meters; this will also define the observation duration
-    'Trx': 1e4 #receiver temp in mK
+    'dish_size_in_lambda': 5.00000,
+    'Trx': 5e4
 }
 
 #=======================END ARRAY SPECIFIC PARAMETERS==========================

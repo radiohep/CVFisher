@@ -56,7 +56,7 @@ for (( i=0 ; $i<$numZs ; i=$i+1 )) ; do
     # #printf "%05d\n" $i
     # echo $currentZ,$currentFreq
 
-    python mk_array_file_z.py -C $calFname -f $currentFreq --track=$totalNumHrs
+    python mk_array_file_z.py -C $calFname -f $currentFreq --track=$hrsperday
     current_array_fname="`cat temp.log | tail -1`"
     rm temp.log
 
