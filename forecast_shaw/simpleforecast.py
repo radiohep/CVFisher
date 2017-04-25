@@ -26,7 +26,8 @@ class InterferometerBase(object):
     f_sky : float
         Fraction of sky observed.
     T_recv : float
-        Receiver temperature in Kelvin.
+        Receiver temperature in Kelvin. This is the temperature for a
+        single polarisation channel.
     num_year : float
         Number of year of total observation time.
     kmax : float
@@ -158,7 +159,10 @@ class InterferometerBase(object):
         # Calculate the comoving volume of a single pixel (beam)
         V_pix = A_pix * d(z)**2 * dxf
 
-        return inv_noise_ps_21cm(self.T_recv + self.T_sky(freq), tau, V_pix,
+        # Receiver temperature contribution to instrumental Stokes I
+        T_recv_I = self.T_recv / 2**0.5
+
+        return inv_noise_ps_21cm(T_recv_I + self.T_sky(freq), tau, V_pix,
                                  self.freq_width, window_par, window_perp)
 
     def k_grid(self):
