@@ -80,15 +80,18 @@ if __name__ == '__main__':
 
     ## debug anze
     
-    sn, nmodes, signal,signalerr, noiserr=experiment_a.signal_noise_single(400., 500., debug=True)
+    sn, nmodes, signal,signalerr, noiserr=experiment_a.signal_noise_single(800., 1000., debug=True)
     print nmodes.shape
     print experiment_a.kbin[:10], experiment_a.T_sky(1000.) 
     print signal.T[5:10,5:10]*(1e3)**2,'signal'
-    print (noiserr).T[3,3]*1e6,'noise'
-
-    
+    print (noiserr).T[7,7]*1e6,'noise', noiserr.shape
+    print nmodes[7,7],'nmodes'
+    np.save("sense",noiserr*1e6)
     import matplotlib.pyplot as plt
-    plt.imshow(np.log10(noiserr*1e6/1.85),origin='lower',vmax=-2,vmin=-3.7)
+    #plt.imshow(np.log10((noiserr+signalerr)/signal),origin='lower',vmax=-2,vmin=-3.7)
+    plt.imshow(np.log10(noiserr*1e6),origin='lower',vmax=-2,vmin=-3.7, extent=(0,5.0, 0.,5.0))
+    plt.xlabel(r"$k_\perp$ $[h/{\rm Mpc}]$", fontsize=18)
+    plt.ylabel(r"$k_\parallel$ $[h/{\rm Mpc}]$", fontsize=18)
     plt.colorbar()
     plt.show()
 

@@ -115,6 +115,7 @@ class InterferometerBase(object):
 
         V = A_sky / 3.0 * (d(freq_to_z(freq_low))**3 - d(freq_to_z(freq_high))**3)
 
+        print V,"=V"
         return V
 
     def window_x(self, x):
@@ -377,6 +378,7 @@ def n_modes_2d(dkpar, kperp, dkperp, V_survey):
     -------
     nmodes : scalar
     """
+    print 'AAA',kperp,dkperp,dkpar
     return 2 * np.pi * kperp * dkperp * dkpar * V_survey / (2 * (2 * np.pi)**3.0)
 
 

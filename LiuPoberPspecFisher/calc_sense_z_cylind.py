@@ -221,12 +221,15 @@ pk_cylind/=we_cylind
 print pk_cylind.shape
 print pk_cylind[5:10,5:10],'signal'
 
-print Tsense_cylind[3,3],'sens'
+print Tsense_cylind[7,7],'sens'
 print (pk_cylind/sense_cylind)[10,10],'snr'
 print (pk_cylind/Tsense_cylind)[10,10],'snr'
 
 import matplotlib.pyplot as plt
-plt.imshow(n.log10(Tsense_cylind.T),origin='lower', vmin=-3.7,vmax=-2)
+plt.imshow(n.log10(Tsense_cylind.T),origin='lower', vmin=-3.7,vmax=-2,extent=(0,5.0, 0.,5.0))
+n.save("tsense.np",Tsense_cylind)
+plt.xlabel(r"$k_\perp$ $[h/{\rm Mpc}]$", fontsize=18)
+plt.ylabel(r"$k_\parallel$ $[h/{\rm Mpc}]$", fontsize=18)
 plt.colorbar()
 plt.show()
 

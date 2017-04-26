@@ -29,8 +29,8 @@ rm asdf.py asdf2.py asdf3.py
 
 
 
-lowerFreq=0.400
-upperFreq=0.500
+lowerFreq=0.8
+upperFreq=1.0
 currentFreq=`echo "scale=20; 0.5*($upperFreq + $lowerFreq)" | bc -l`
 currentBandwidth=`echo "scale=20; $upperFreq - $lowerFreq" | bc -l`
 
@@ -45,7 +45,7 @@ echo $currentTsky
 # #printf "%05d\n" $i
 # echo $currentZ,$currentFreq
 
-python mk_array_file_z.py -C $calFname -f $currentFreq
+#python mk_array_file_z.py -C $calFname -f $currentFreq
 current_array_fname="`cat temp.log | tail -1`"
 #rm temp.log
 
