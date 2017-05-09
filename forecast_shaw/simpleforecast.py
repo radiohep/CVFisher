@@ -5,6 +5,8 @@ interferometers, and single-dish/multi-beam experiments.
 """
 
 import numpy as np
+import scipy.integrate
+import scipy.interpolate
 
 from cora.signal import corr21cm
 from cora.util import units
@@ -146,15 +148,32 @@ class InterferometerBase(object):
         # Define the window function in k-space for the parallel and perpendicular directions.
         # Use a sinc function for parallel as it is the FT of a top-hat bin. This is probably a bad choice.
         def window_par(kpar):
-            y = kpar * dxf / (2 * np.pi)
+            y = kpar * dxf / (4 * np.pi)
             return np.sinc(y) * (np.abs(y) < 1.0)
 
-        # Use a triangle for perpendicular window function, this is sensible as it's the UV plane window
-        # function for a compact interferometer where each element is uniformly illuminated
-        def window_perp(kperp):
-            x = (3e2 * kperp * d(z)) / (freq * 2 * np.pi)
+        # Azimuthally average over the X and Y window functions to produce an
+        # overall k_perp window function. Do this by averaging for a set number
+        # of points k values and then generating an interpolating function to
+        # appeoximate the full result.
+        def _int(phi, k):
+            # Integrand to average over
+            x = (3e2 * k * d(z)) / (freq * 2 * np.pi)
 
-            return (self.window_x(x) * self.window_y(x))**0.5  # This is not correct but is probably good for now
+            xx = x * np.cos(phi)
+            xy = x * np.sin(phi)
+            return (self.window_x(xx) * self.window_y(xy))**2
+
+        def _w_xy_average(k):
+            # Full averaged window function
+            return scipy.integrate.fixed_quad(_int, 0, 2 * np.pi, args=(k,), n=1024)[0]
+
+        # Generate a log interpolated approximation
+        k_val = np.linspace(0, self.kmax, 256)
+        int_val = np.array([_w_xy_average(k)**0.5 for k in k_val])
+        _w_perp_interp = scipy.interpolate.interp1d(k_val, np.log(int_val))
+
+        def window_perp(kperp):
+            return np.exp(_w_perp_interp(kperp))
 
         # Calculate the comoving volume of a single pixel (beam)
         V_pix = A_pix * d(z)**2 * dxf
