@@ -53,14 +53,14 @@ https://www.cv.nrao.edu/~demerson/radiosky/rsky_p3.htm
 
 ## Experiment
 
-Let's do experiment by letters:
+The cosmic fisher S2 experiment is given by
 
 ### Experiment A:
 
- * 32x32 regular grid of parabollic dishes
- * D=10m
+ * 256x256 regular grid of parabollic dishes
+ * D=6
  * f_sky=0.5
- * Treceiver=10K and 50K
- * zrange1: 0-6, zrange2: 30-50
+ * Treceiver=50K
+ * zrange1: 2-6, zrange2: 30-50
  * integration time: 5 years at 100% efficiency
  
